@@ -1,4 +1,4 @@
-package events;
+package me.practice.spring_practice_rest_api.events;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

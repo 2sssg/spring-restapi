@@ -1,4 +1,4 @@
-package events;
+package me.practice.spring_practice_rest_api.events;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
