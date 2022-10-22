@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class EventsControllerTests {
+class EventsControllerTests {
 
 	@Autowired MockMvc mockMvc;
 
@@ -35,7 +35,7 @@ public class EventsControllerTests {
 
 	@Test
 	@DisplayName("정상적인 이벤트")
-	public void createEvent() throws Exception {
+	void createEvent() throws Exception {
 
 		// Given, When
 		EventDto eventDto = EventDto.builder()
@@ -65,13 +65,14 @@ public class EventsControllerTests {
 				.andExpect(header().exists(HttpHeaders.LOCATION))
 				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
 				.andExpect(jsonPath("id").value(Matchers.not(100)))
-				.andExpect(jsonPath("free").value(Matchers.not(true)))
+				.andExpect(jsonPath("free").value(false))
+				.andExpect(jsonPath("offline").value(true))
 				.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
 	}
 
 	@Test
 	@DisplayName("잘못된 파라미터가 들어왔을 때 테스트")
-	public void createEventBadRequest() throws Exception {
+	void createEventBadRequest() throws Exception {
 
 		// Given, When
 		Event event = Event.builder()
@@ -107,7 +108,7 @@ public class EventsControllerTests {
 
 	@Test
 	@DisplayName("들어와야할 input값이 없을 때")
-	public void createEventBadRequestEmptyInput() throws Exception {
+	void createEventBadRequestEmptyInput() throws Exception {
 		EventDto eventDto = EventDto.builder().build();
 
 		this.mockMvc.perform(post("/api/events")
@@ -122,7 +123,7 @@ public class EventsControllerTests {
 
 	@Test
 	@DisplayName("input값이 잘못됐을 때")
-	public void createEventBadRequestWrongInput() throws Exception {
+	void createEventBadRequestWrongInput() throws Exception {
 		EventDto eventDto = EventDto.builder()
 				.name("Spring")
 				.description("REST API Development with Spring")

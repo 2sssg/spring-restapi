@@ -39,4 +39,16 @@ public class Event {
 	private int maxPrice;
 	private int limitOfEnrollment;
 
+	public void update() {
+		updateFree();
+		updateOffline();
+	}
+
+	private void updateFree() {
+		this.free = this.basePrice == 0 && this.maxPrice == 0;
+	}
+
+	private void updateOffline() {
+		this.offline = !(this.location == null || this.location.isBlank());
+	}
 }
