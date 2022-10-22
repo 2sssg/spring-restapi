@@ -29,6 +29,8 @@ public class EventController {
 
 	@PostMapping
 	public ResponseEntity<Event> createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
+		if (errors.hasErrors())
+			return ResponseEntity.badRequest().build();
 
 		eventValidator.validate(eventDto, errors);
 

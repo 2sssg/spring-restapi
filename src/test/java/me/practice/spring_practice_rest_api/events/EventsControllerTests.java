@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -33,6 +34,7 @@ public class EventsControllerTests {
 	@Autowired ObjectMapper objectMapper;
 
 	@Test
+	@DisplayName("정상적인 이벤트")
 	public void createEvent() throws Exception {
 
 		// Given, When
@@ -68,6 +70,7 @@ public class EventsControllerTests {
 	}
 
 	@Test
+	@DisplayName("잘못된 파라미터가 들어왔을 때 테스트")
 	public void createEventBadRequest() throws Exception {
 
 		// Given, When
@@ -103,6 +106,7 @@ public class EventsControllerTests {
 	}
 
 	@Test
+	@DisplayName("들어와야할 input값이 없을 때")
 	public void createEventBadRequestEmptyInput() throws Exception {
 		EventDto eventDto = EventDto.builder().build();
 
@@ -117,6 +121,7 @@ public class EventsControllerTests {
 	}
 
 	@Test
+	@DisplayName("input값이 잘못됐을 때")
 	public void createEventBadRequestWrongInput() throws Exception {
 		EventDto eventDto = EventDto.builder()
 				.name("Spring")
