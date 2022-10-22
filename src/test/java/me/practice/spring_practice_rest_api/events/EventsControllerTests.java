@@ -36,6 +36,41 @@ public class EventsControllerTests {
 	public void createEvent() throws Exception {
 
 		// Given, When
+		EventDto eventDto = EventDto.builder()
+				.name("Spring")
+				.description("REST API Development with Spring")
+				.beginEnrollmentDateTime(LocalDateTime.of(2022, 10, 19, 18, 10))
+				.closeEnrollmentDateTime(LocalDateTime.of(2022, 10, 20, 18, 10))
+				.beginEventDateTime(LocalDateTime.of(2022, 10, 21, 18, 10))
+				.endEventDateTime(LocalDateTime.of(2022, 10, 22, 18, 10))
+				.basePrice(100)
+				.maxPrice(200)
+				.limitOfEnrollment(100)
+				.location("화정동")
+				.build();
+
+		// When
+//		Mockito.when(eventRepository.save(event)).thenReturn(event);
+
+		// Then
+		mockMvc.perform(post("/api/events/")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaTypes.HAL_JSON)
+						.content(objectMapper.writeValueAsString(eventDto))
+				)
+				.andDo(print())
+				.andExpect(status().isCreated())
+				.andExpect(header().exists(HttpHeaders.LOCATION))
+				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+				.andExpect(jsonPath("id").value(Matchers.not(100)))
+				.andExpect(jsonPath("free").value(Matchers.not(true)))
+				.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
+	}
+
+	@Test
+	public void createEventBadRequest() throws Exception {
+
+		// Given, When
 		Event event = Event.builder()
 				.name("Spring")
 				.description("REST API Development with Spring")
@@ -63,11 +98,21 @@ public class EventsControllerTests {
 						.content(objectMapper.writeValueAsString(event))
 				)
 				.andDo(print())
-				.andExpect(status().isCreated())
-				.andExpect(header().exists(HttpHeaders.LOCATION))
-				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-				.andExpect(jsonPath("id").value(Matchers.not(100)))
-				.andExpect(jsonPath("free").value(Matchers.not(true)))
-				.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
+				.andExpect(status().isBadRequest())
+		;
+	}
+
+	@Test
+	public void createEventBadRequestEmptyInput() throws Exception {
+		EventDto eventDto = EventDto.builder().build();
+
+		this.mockMvc.perform(post("/api/events")
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaTypes.HAL_JSON)
+						.content(objectMapper.writeValueAsString(eventDto))
+				)
+				.andDo(print())
+				.andExpect(status().isBadRequest())
+				;
 	}
 }
