@@ -165,6 +165,7 @@ class EventsControllerTests {
 				)
 				.andDo(print())
 				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("_links.index").exists())
 		;
 	}
 

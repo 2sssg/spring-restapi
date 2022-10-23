@@ -6,6 +6,7 @@ import java.net.URI;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.practice.spring_practice_rest_api.common.ErrorsResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.LinkRelation;
@@ -33,12 +34,12 @@ public class EventController {
 	@PostMapping
 	public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors) {
 		if (errors.hasErrors())
-			return ResponseEntity.badRequest().body(errors);
+			return getErrorsResourceResponseEntity(errors);
 
 		eventValidator.validate(eventDto, errors);
 
 		if (errors.hasErrors())
-			return ResponseEntity.badRequest().body(errors);
+			return getErrorsResourceResponseEntity(errors);
 
 		Event event = modelMapper.map(eventDto, Event.class);
 		event.update();
@@ -50,5 +51,9 @@ public class EventController {
 		eventResource.add(selfLinkBuilder.withRel("update-event"));
 		eventResource.add(Link.of("/docs/index.html#resources-events-create","profile"));
 		return ResponseEntity.created(createdUri).body(eventResource);
+	}
+
+	private ResponseEntity<ErrorsResource> getErrorsResourceResponseEntity(Errors errors) {
+		return ResponseEntity.badRequest().body(new ErrorsResource(errors));
 	}
 }
