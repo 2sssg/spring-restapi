@@ -4,8 +4,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.Arrays;
-import me.practice.spring_practice_rest_api.events.Event;
-import me.practice.spring_practice_rest_api.events.EventController;
 import me.practice.spring_practice_rest_api.index.IndexController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
