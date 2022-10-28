@@ -1,5 +1,6 @@
 package me.practice.spring_practice_rest_api.events;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import me.practice.spring_practice_rest_api.accounts.Account;
+import me.practice.spring_practice_rest_api.accounts.AccountSerializer;
 
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of = "id")
@@ -40,6 +42,7 @@ public class Event {
 	private int basePrice; // (optional)
 	private int maxPrice;
 	private int limitOfEnrollment;
+	@JsonSerialize(using = AccountSerializer.class)
 	@ManyToOne
 	private Account manager;
 
