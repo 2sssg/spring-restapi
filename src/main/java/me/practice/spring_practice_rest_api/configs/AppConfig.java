@@ -4,6 +4,7 @@ import java.util.Set;
 import me.practice.spring_practice_rest_api.accounts.Account;
 import me.practice.spring_practice_rest_api.accounts.AccountRole;
 import me.practice.spring_practice_rest_api.accounts.AccountService;
+import me.practice.spring_practice_rest_api.common.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -22,15 +23,25 @@ public class AppConfig {
 
 			@Autowired AccountService accountService;
 
+			@Autowired AppProperties appProperties;
+
 			@Override
 			public void run(ApplicationArguments args) throws Exception {
-				Account account = Account.builder()
-						.email("temp@temp.temp")
-						.password("123")
+
+				Account admin = Account.builder()
+						.email(appProperties.getAdminUsername())
+						.password(appProperties.getPassword())
 						.roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
 						.build();
 
-				accountService.saveAccount(account);
+				Account user = Account.builder()
+						.email(appProperties.getUserUsername())
+						.password(appProperties.getPassword())
+						.roles(Set.of(AccountRole.USER))
+						.build();
+
+				accountService.saveAccount(admin);
+				accountService.saveAccount(user);
 			}
 		};
 	}

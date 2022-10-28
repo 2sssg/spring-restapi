@@ -1,8 +1,8 @@
 package me.practice.spring_practice_rest_api.configs;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import me.practice.spring_practice_rest_api.accounts.AccountService;
+import me.practice.spring_practice_rest_api.common.AppProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +26,8 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	private final TokenStore tokenStore;
 
+	private final AppProperties appProperties;
+
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		security.passwordEncoder(passwordEncoder);
@@ -34,14 +36,12 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
-				.withClient("myApp")
+				.withClient(appProperties.getClientId())
 				.authorizedGrantTypes("password", "refresh_token")
-				.scopes("read write")
-				.secret(this.passwordEncoder.encode("pass"))
+				.scopes("read", "write")
+				.secret(this.passwordEncoder.encode(appProperties.getClientSecret()))
 				.accessTokenValiditySeconds(10 * 60)
-				.refreshTokenValiditySeconds(6 * 10 * 60)
-
-		;
+				.refreshTokenValiditySeconds(6 * 10 * 60);
 	}
 
 	@Override

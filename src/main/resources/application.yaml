@@ -26,3 +26,9 @@ logging:
       hibernate.SQL: DEBUG
     type.descriptor.sql.BasicBinder: TRACE
 
+my-app:
+  password: password
+  admin-username: admin@email.com
+  user-username: user
+  client-id: clientId
+  client-secret: clientPassword
